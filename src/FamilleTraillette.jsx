@@ -47,7 +47,7 @@ const CLANS = [
     rank: "Clan 1",
     thLabel: "Hdv 15 et +",
     thMin: 15,
-    thMax: 17,
+    thMax: 18,
     accent: "violet",
     pitch:
       "Réservé aux joueurs expérimentés. Guerres haut niveau, ligue légendes, compétitivité au rendez-vous.",
@@ -71,7 +71,7 @@ const CLANS = [
     rank: "Clan 3",
     thLabel: "Tous Hdv",
     thMin: 1,
-    thMax: 17,
+    thMax: 18,
     accent: "green",
     pitch:
       "Ouvert à tous les Hôtels de Ville. Détente, événements, fun et entraide, sans prise de tête.",
@@ -469,7 +469,7 @@ const ClanCard = ({ clan, live, selected }) => {
 const Clans = () => {
   const live = useClanData();
   const [selected, setSelected] = useState(null);
-  const levels = Array.from({ length: 17 }, (_, i) => i + 1);
+  const levels = Array.from({ length: 18 }, (_, i) => i + 1);
 
   return (
     <section id="clans" className="mx-auto max-w-6xl px-5 py-20">
