@@ -1,0 +1,244 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Famille Traillette — thème du site.
+   Les polices sont chargées depuis index.html (preconnect + display=swap)
+   plutôt qu'ici : un @import CSS bloque le rendu le temps du téléchargement.
+------------------------------------------------------------------- */
+
+body {
+  margin: 0;
+  background: #120e1c;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Le header est sticky : sans marge, les ancres arrivent cachées dessous. */
+:target {
+  scroll-margin-top: 5rem;
+}
+
+.ft {
+  --ink: #120e1c;
+  --panel: #1e1730;
+  --panel2: #2a2040;
+  --line: #382b52;
+  --gold: #f0b429;
+  --gold-dim: #8a6412;
+  --violet: #9b5de5;
+  --blue: #4fa8e8;
+  --green: #4fd18b;
+  --blurple: #5865f2;
+  --blurple-hi: #6e79f5;
+  --text: #efe9f7;
+  --muted: #a092be;
+  --texture-voile: 0.88;
+  --texture-taille: 340px;
+  background: var(--ink);
+  color: var(--text);
+  font-family: "Outfit", system-ui, sans-serif;
+}
+
+.ft-display {
+  font-family: "Lilita One", cursive;
+  letter-spacing: 0.01em;
+}
+.ft-label {
+  font-family: "Barlow Condensed", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+/* Texture de runes répétée à taille fixe : l'échelle du motif reste
+   identique sur une petite carte comme sur un grand panneau (en `cover`,
+   chaque bloc l'agrandissait différemment). La tuile est raccordable.
+   Règle --texture-voile pour doser : 1 = texture invisible, 0.8 = marquée. */
+.ft-panel {
+  background-color: var(--panel);
+  background-image:
+    linear-gradient(
+      rgba(30, 23, 48, var(--texture-voile)),
+      rgba(30, 23, 48, var(--texture-voile))
+    ),
+    url("/texture-runes.webp");
+  background-size: var(--texture-taille);
+  border: 1px solid var(--line);
+}
+.ft-panel2 {
+  background: var(--panel2);
+}
+.ft-muted {
+  color: var(--muted);
+}
+.ft-gold {
+  color: var(--gold);
+}
+.ft-line {
+  border-color: var(--line);
+}
+
+/* Fond du hero : l'illustration porte la moitié droite, les dégradés
+   garantissent le contraste du texte à gauche quelle que soit la largeur. */
+.ft-hero-bg {
+  background-color: var(--ink);
+  background-image:
+    linear-gradient(180deg, rgba(18, 14, 28, 0.6) 0%, transparent 28%, var(--ink) 98%),
+    linear-gradient(
+      90deg,
+      rgba(18, 14, 28, 0.96) 0%,
+      rgba(18, 14, 28, 0.82) 42%,
+      rgba(18, 14, 28, 0.25) 72%,
+      transparent 100%
+    ),
+    url("/hero-bg-mobile.webp");
+  background-size: cover;
+  background-position: right center;
+  background-repeat: no-repeat;
+}
+
+/* En dessous de md le contenu passe sur une colonne : l'illustration
+   repasse derrière un voile plus dense pour rester lisible. */
+@media (max-width: 767px) {
+  .ft-hero-bg {
+    background-image:
+      linear-gradient(180deg, rgba(18, 14, 28, 0.9) 0%, rgba(18, 14, 28, 0.7) 55%, var(--ink) 100%),
+      url("/hero-bg-mobile.webp");
+    background-position: 72% center;
+  }
+}
+
+@media (min-width: 768px) {
+  .ft-hero-bg {
+    background-image:
+      linear-gradient(180deg, rgba(18, 14, 28, 0.6) 0%, transparent 28%, var(--ink) 98%),
+      linear-gradient(
+        90deg,
+        rgba(18, 14, 28, 0.96) 0%,
+        rgba(18, 14, 28, 0.82) 42%,
+        rgba(18, 14, 28, 0.25) 72%,
+        transparent 100%
+      ),
+      url("/hero-bg.webp");
+  }
+}
+
+.ft-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.3;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(70% 60% at 50% 40%, #000 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 40%, #000 30%, transparent 100%);
+}
+
+.ft-btn {
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    background-color 0.16s ease;
+}
+.ft-btn:hover {
+  transform: translateY(-2px);
+}
+.ft-btn:focus-visible,
+.ft-th:focus-visible,
+.ft-nav:focus-visible,
+.ft-skip:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.ft-discord {
+  background: var(--blurple);
+}
+.ft-discord:hover {
+  background: var(--blurple-hi);
+  box-shadow: 0 10px 30px -10px rgba(88, 101, 242, 0.8);
+}
+.ft-ghost {
+  border: 1px solid var(--gold);
+  color: var(--gold);
+}
+.ft-ghost:hover {
+  background: rgba(240, 180, 41, 0.1);
+}
+
+.ft-card {
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.ft-card[data-on="true"] {
+  transform: translateY(-4px);
+}
+.ft-card[data-dim="true"] {
+  opacity: 0.42;
+}
+
+.ft-th {
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease,
+    border-color 0.12s ease;
+}
+.ft-th[data-on="true"] {
+  background: var(--gold);
+  color: #1a1206;
+  border-color: var(--gold);
+}
+
+.ft-tag {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  transition:
+    border-color 0.16s ease,
+    background-color 0.16s ease;
+}
+.ft-tag:hover {
+  border-color: var(--gold);
+}
+
+.ft-sep {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line), transparent);
+}
+
+/* Lien d'évitement : masqué jusqu'à la navigation au clavier. */
+.ft-skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 60;
+}
+.ft-skip:focus {
+  left: 1rem;
+  top: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--gold);
+  color: #1a1206;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .ft-btn,
+  .ft-card,
+  .ft-th {
+    transition: none;
+  }
+  .ft-btn:hover,
+  .ft-card[data-on="true"] {
+    transform: none;
+  }
+}

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Famille Traillette — Trois clans Clash of Clans</title>
+    <meta
+      name="description"
+      content="Trois clans Clash of Clans pour tous les niveaux d'Hôtel de Ville. Une communauté française soudée, active et passionnée. Recrutement ouvert sur Discord."
+    />
+    <meta name="theme-color" content="#120E1C" />
+
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <!-- Aperçu lors des partages (Discord, réseaux sociaux).
+         Remplace SITE_URL par le domaine final : les crawlers exigent des URL absolues. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Famille Traillette" />
+    <meta property="og:title" content="Famille Traillette — Trois clans Clash of Clans" />
+    <meta
+      property="og:description"
+      content="Trois clans, une même famille. Recrutement ouvert pour tous les niveaux d'Hôtel de Ville."
+    />
+    <meta property="og:image" content="https://SITE_URL/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Outfit:wght@300;400;500;600&family=Barlow+Condensed:wght@500;600&display=swap"
+    />
+    <!-- Un fond déclaré en CSS n'est découvert qu'après le parsing de la
+         feuille de style : on le précharge pour ne pas retarder l'affichage. -->
+    <link
+      rel="preload"
+      as="image"
+      href="/hero-bg.webp"
+      media="(min-width: 768px)"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/hero-bg-mobile.webp"
+      media="(max-width: 767px)"
+      fetchpriority="high"
+    />
+    <link rel="preload" as="image" href="/logo-traillette.webp" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
