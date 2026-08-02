@@ -34,8 +34,8 @@ html {
   --blurple-hi: #6e79f5;
   --text: #efe9f7;
   --muted: #a092be;
-  --texture-voile: 0.88;
-  --texture-taille: 340px;
+  --texture-voile: 0.9;
+  --texture-taille: 300px;
   background: var(--ink);
   color: var(--text);
   font-family: "Outfit", system-ui, sans-serif;
@@ -51,10 +51,11 @@ html {
   letter-spacing: 0.14em;
 }
 
-/* Texture de runes répétée à taille fixe : l'échelle du motif reste
-   identique sur une petite carte comme sur un grand panneau (en `cover`,
-   chaque bloc l'agrandissait différemment). La tuile est raccordable.
-   Règle --texture-voile pour doser : 1 = texture invisible, 0.8 = marquée. */
+/* Texture des panneaux : tuile de runes dorées, raccordable, répétée à
+   taille fixe pour garder la même échelle sur une petite carte comme sur
+   un grand bloc. Le voile la ramène au rang de matière sans gêner la
+   lecture — c'est le seul réglage à toucher.
+   --texture-voile : 0.85 = runes marquées · 0.95 = presque invisible. */
 .ft-panel {
   background-color: var(--panel);
   background-image:
