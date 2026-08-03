@@ -52,6 +52,10 @@ const CLANS = [
     thMin: 15,
     thMax: 18,
     accent: "violet",
+    // Logo propre au clan (facultatif). Déposer le fichier dans /public sous
+    // ce nom : il remplace alors le blason du jeu sur la carte. S'il est absent
+    // ou ne charge pas, on retombe automatiquement sur l'affichage habituel.
+    logo: "/logo-mamie-traillette.webp",
     emoji: "👵",
     emojiEnd: "⚔️",
     slogan: "On attaque avec sagesse, on gagne avec panache !",
@@ -420,6 +424,43 @@ const Places = ({ membres }) => {
   );
 };
 
+/* Emblème de la carte : logo personnalisé du clan en priorité, sinon le
+   blason renvoyé par l'API, sinon le niveau d'Hôtel de Ville. Si le logo
+   personnalisé ne charge pas (fichier absent), on bascule sans casse sur
+   les affichages de secours. */
+const ClanEmblem = ({ clan, live }) => {
+  const [failed, setFailed] = useState(false);
+  const d = live[clan.tag];
+
+  if (clan.logo && !failed) {
+    return (
+      <img
+        src={clan.logo}
+        alt=""
+        width={200}
+        height={200}
+        loading="lazy"
+        decoding="async"
+        onError={() => setFailed(true)}
+        className="relative z-10 h-20 w-20 rounded-full object-contain"
+        aria-hidden="true"
+      />
+    );
+  }
+
+  if (d?.badge) {
+    return (
+      <img src={d.badge} alt="" width={200} height={200} loading="lazy" decoding="async" className="relative z-10 h-20 w-20" />
+    );
+  }
+
+  return (
+    <span className="ft-display relative z-10 text-4xl" style={{ color: `var(--${clan.accent})` }}>
+      {clan.thLabel.replace("Hdv ", "")}
+    </span>
+  );
+};
+
 const ClanCard = ({ clan, live, selected }) => {
   const on = selected !== null && selected >= clan.thMin && selected <= clan.thMax;
   const dim = selected !== null && !on;
@@ -443,13 +484,7 @@ const ClanCard = ({ clan, live, selected }) => {
       </span>
 
       <div className="ft-crest-halo flex h-20 items-center justify-center">
-        {d?.badge ? (
-          <img src={d.badge} alt="" width={200} height={200} loading="lazy" decoding="async" className="relative z-10 h-20 w-20" />
-        ) : (
-          <span className="ft-display relative z-10 text-4xl" style={{ color: `var(--${clan.accent})` }}>
-            {clan.thLabel.replace("Hdv ", "")}
-          </span>
-        )}
+        <ClanEmblem clan={clan} live={live} />
       </div>
 
       <h3 className="ft-display mt-4 text-center text-2xl">{clan.name}</h3>
