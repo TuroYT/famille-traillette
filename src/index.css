@@ -213,6 +213,51 @@ html {
   background: linear-gradient(90deg, transparent, var(--line), transparent);
 }
 
+/* Bulle d'accroche du clan : reprend la couleur d'accent (--accent, posée
+   sur la carte) en fond léger et bordure teintée, avec une petite pointe
+   qui la relie au nom du clan juste au-dessus. */
+.ft-bulle {
+  position: relative;
+  background: color-mix(in srgb, var(--accent, var(--violet)) 12%, var(--panel2));
+  border: 1px solid color-mix(in srgb, var(--accent, var(--violet)) 45%, transparent);
+  color: var(--text);
+}
+.ft-bulle::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  transform: translateX(-50%) rotate(45deg);
+  background: color-mix(in srgb, var(--accent, var(--violet)) 12%, var(--panel2));
+  border-left: 1px solid color-mix(in srgb, var(--accent, var(--violet)) 45%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--accent, var(--violet)) 45%, transparent);
+}
+
+/* Halo derrière l'emblème : lueur douce aux couleurs du clan pour donner
+   à chaque carte son ambiance sans gêner la lisibilité du badge. */
+.ft-crest-halo {
+  position: relative;
+}
+.ft-crest-halo::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 130px;
+  height: 130px;
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent, var(--violet)) 30%, transparent) 0%,
+    transparent 68%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* Lien d'évitement : masqué jusqu'à la navigation au clavier. */
 .ft-skip {
   position: absolute;

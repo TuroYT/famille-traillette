@@ -40,6 +40,9 @@ const traduireLigue = (nom) =>
         .trim()
     : null;
 
+// Chaque clan porte son propre thème : la couleur d'accent colore la carte
+// (badge, bordure, halo) et une phrase d'accroche lui donne sa personnalité.
+// Modifier `slogan`, `emoji` et `emojiEnd` suffit à changer le ton d'un clan.
 const CLANS = [
   {
     tag: "2CQ08LYJ8",
@@ -49,6 +52,13 @@ const CLANS = [
     thMin: 15,
     thMax: 18,
     accent: "violet",
+    // Logo propre au clan (facultatif). Déposer le fichier dans /public sous
+    // ce nom : il remplace alors le blason du jeu sur la carte. S'il est absent
+    // ou ne charge pas, on retombe automatiquement sur l'affichage habituel.
+    logo: "/logo-mamie-traillette.webp",
+    emoji: "👵",
+    emojiEnd: "⚔️",
+    slogan: "On attaque avec sagesse, on gagne avec panache !",
     pitch:
       "Réservé aux joueurs expérimentés. Guerres haut niveau, ligue légendes, compétitivité au rendez-vous.",
     stats: { ligue: "Légendes", guerres: "Toujours", type: "Compétitif" },
@@ -61,6 +71,9 @@ const CLANS = [
     thMin: 3,
     thMax: 14,
     accent: "blue",
+    emoji: "👴",
+    emojiEnd: "📈",
+    slogan: "On grimpe les Hdv à notre rythme, et on lâche rien !",
     pitch:
       "Pour progresser à son rythme. Entraide, dons et conseils pour monter en puissance et passer au niveau supérieur.",
     stats: { ligue: "Or à Titan", guerres: "Régulières", type: "Progression" },
@@ -73,6 +86,9 @@ const CLANS = [
     thMin: 1,
     thMax: 18,
     accent: "green",
+    emoji: "💀",
+    emojiEnd: "🎉",
+    slogan: "Ici on joue pour le fun… et on écrase quand même !",
     pitch:
       "Ouvert à tous les Hôtels de Ville. Détente, événements, fun et entraide, sans prise de tête.",
     stats: { ligue: "Libre", guerres: "Farm / Fun", type: "Détente" },
@@ -408,6 +424,43 @@ const Places = ({ membres }) => {
   );
 };
 
+/* Emblème de la carte : logo personnalisé du clan en priorité, sinon le
+   blason renvoyé par l'API, sinon le niveau d'Hôtel de Ville. Si le logo
+   personnalisé ne charge pas (fichier absent), on bascule sans casse sur
+   les affichages de secours. */
+const ClanEmblem = ({ clan, live }) => {
+  const [failed, setFailed] = useState(false);
+  const d = live[clan.tag];
+
+  if (clan.logo && !failed) {
+    return (
+      <img
+        src={clan.logo}
+        alt=""
+        width={200}
+        height={200}
+        loading="lazy"
+        decoding="async"
+        onError={() => setFailed(true)}
+        className="relative z-10 h-20 w-20 rounded-full object-contain"
+        aria-hidden="true"
+      />
+    );
+  }
+
+  if (d?.badge) {
+    return (
+      <img src={d.badge} alt="" width={200} height={200} loading="lazy" decoding="async" className="relative z-10 h-20 w-20" />
+    );
+  }
+
+  return (
+    <span className="ft-display relative z-10 text-4xl" style={{ color: `var(--${clan.accent})` }}>
+      {clan.thLabel.replace("Hdv ", "")}
+    </span>
+  );
+};
+
 const ClanCard = ({ clan, live, selected }) => {
   const on = selected !== null && selected >= clan.thMin && selected <= clan.thMax;
   const dim = selected !== null && !on;
@@ -418,7 +471,10 @@ const ClanCard = ({ clan, live, selected }) => {
       className="ft-card ft-panel relative rounded-2xl p-6"
       data-on={on}
       data-dim={dim}
-      style={on ? { borderColor: `var(--${clan.accent})`, boxShadow: `0 18px 40px -22px var(--${clan.accent})` } : undefined}
+      style={{
+        "--accent": `var(--${clan.accent})`,
+        ...(on ? { borderColor: `var(--${clan.accent})`, boxShadow: `0 18px 40px -22px var(--${clan.accent})` } : {}),
+      }}
     >
       <span
         className="ft-label absolute -top-3 left-6 rounded px-2 py-1 text-xs"
@@ -427,20 +483,22 @@ const ClanCard = ({ clan, live, selected }) => {
         {clan.rank}
       </span>
 
-      <div className="flex h-20 items-center justify-center">
-        {d?.badge ? (
-          <img src={d.badge} alt="" width={200} height={200} loading="lazy" decoding="async" className="h-20 w-20" />
-        ) : (
-          <span className="ft-display text-4xl" style={{ color: `var(--${clan.accent})` }}>
-            {clan.thLabel.replace("Hdv ", "")}
-          </span>
-        )}
+      <div className="ft-crest-halo flex h-20 items-center justify-center">
+        <ClanEmblem clan={clan} live={live} />
       </div>
 
       <h3 className="ft-display mt-4 text-center text-2xl">{clan.name}</h3>
       <p className="ft-label mt-1 text-center text-sm" style={{ color: `var(--${clan.accent})` }}>
         {clan.thLabel}
       </p>
+
+      {clan.slogan && (
+        <p className="ft-bulle mx-auto mt-4 max-w-xs rounded-xl px-4 py-2.5 text-center text-sm italic leading-snug">
+          {clan.emoji && <span className="not-italic">{clan.emoji} </span>}
+          <span style={{ color: `var(--${clan.accent})` }}>{clan.slogan}</span>
+          {clan.emojiEnd && <span className="not-italic"> {clan.emojiEnd}</span>}
+        </p>
+      )}
 
       <TagClan tag={clan.tag} />
 
