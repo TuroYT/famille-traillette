@@ -48,8 +48,8 @@ const CLANS = [
     tag: "2CQ08LYJ8",
     name: "MamieTraillette",
     rank: "Clan 1",
-    thLabel: "Hdv 15 et +",
-    thMin: 15,
+    thLabel: "Hdv 18 uniquement",
+    thMin: 18,
     thMax: 18,
     accent: "violet",
     // Logo propre au clan (facultatif). Déposer le fichier dans /public sous
@@ -60,38 +60,24 @@ const CLANS = [
     emojiEnd: "⚔️",
     slogan: "On attaque avec sagesse, on gagne avec panache !",
     pitch:
-      "Réservé aux joueurs expérimentés. Guerres haut niveau, ligue légendes, compétitivité au rendez-vous.",
-    stats: { ligue: "Légendes", guerres: "Toujours", type: "Compétitif" },
+      "Réservé aux Hdv 18 en ligue Electro 33 minimum. Guerres haut niveau, compétitivité au rendez-vous.",
+    stats: { ligue: "Electro 33+", guerres: "Toujours", type: "Compétitif" },
   },
   {
     tag: "2CU0P0RGQ",
     name: "PapiTraillette",
     rank: "Clan 2",
-    thLabel: "Hdv 3 à 14",
-    thMin: 3,
-    thMax: 14,
+    thLabel: "Hdv 1 à 17",
+    thMin: 1,
+    thMax: 17,
     accent: "blue",
+    logo: "/logo-papi-traillette.webp",
     emoji: "👴",
     emojiEnd: "📈",
     slogan: "On grimpe les Hdv à notre rythme, et on lâche rien !",
     pitch:
       "Pour progresser à son rythme. Entraide, dons et conseils pour monter en puissance et passer au niveau supérieur.",
     stats: { ligue: "Or à Titan", guerres: "Régulières", type: "Progression" },
-  },
-  {
-    tag: "2RVYUPRUU",
-    name: "Ehpad Élite",
-    rank: "Clan 3",
-    thLabel: "Tous Hdv",
-    thMin: 1,
-    thMax: 18,
-    accent: "green",
-    emoji: "💀",
-    emojiEnd: "🎉",
-    slogan: "Ici on joue pour le fun… et on écrase quand même !",
-    pitch:
-      "Ouvert à tous les Hôtels de Ville. Détente, événements, fun et entraide, sans prise de tête.",
-    stats: { ligue: "Libre", guerres: "Farm / Fun", type: "Détente" },
   },
 ];
 
@@ -108,7 +94,7 @@ const VALEURS = [
   },
   {
     titre: "Progression",
-    texte: "Trois clans adaptés à chaque niveau pour progresser sereinement.",
+    texte: "Deux clans adaptés à chaque niveau pour progresser sereinement.",
     icon: "chart",
   },
   {
@@ -222,7 +208,7 @@ function useClanData() {
 
     Promise.all(
       CLANS.map((c) =>
-        fetch(`${CLASHKING}/v1/clans/%23${c.tag}`, { signal: ctrl.signal })
+        fetch(`${CLASHKING}/v2/clan/%23${c.tag}/cached`, { signal: ctrl.signal })
           .then((r) => (r.ok ? r.json() : null))
           .catch(() => null)
       )
@@ -234,7 +220,7 @@ function useClanData() {
         if (d && d.name) {
           out[CLANS[i].tag] = {
             level: d.clanLevel,
-            members: d.members,
+            members: d.memberCount,
             badge: d.badgeUrls?.medium,
             warLeague: traduireLigue(d.warLeague?.name),
           };
@@ -283,6 +269,7 @@ function useCopie(texte) {
 const LIENS_NAV = [
   ["Accueil", "#accueil"],
   ["Nos clans", "#clans"],
+  ["Tournois", "#tournois"],
   ["Recrutement", "#recrutement"],
 ];
 
@@ -370,7 +357,7 @@ const Hero = () => (
           <span className="block ft-gold">TRAILLETTE</span>
         </h1>
         <p className="ft-muted mt-6 max-w-md text-lg leading-relaxed">
-          Trois clans, une même famille. Une communauté soudée, active et
+          Deux clans, une même famille. Une communauté soudée, active et
           passionnée par Clash of Clans.
         </p>
         <div className="mt-9 flex flex-wrap gap-3">
@@ -442,7 +429,7 @@ const ClanEmblem = ({ clan, live }) => {
         loading="lazy"
         decoding="async"
         onError={() => setFailed(true)}
-        className="relative z-10 h-20 w-20 rounded-full object-contain"
+        className="relative z-10 h-36 w-36 object-contain"
         aria-hidden="true"
       />
     );
@@ -456,7 +443,7 @@ const ClanEmblem = ({ clan, live }) => {
 
   return (
     <span className="ft-display relative z-10 text-4xl" style={{ color: `var(--${clan.accent})` }}>
-      {clan.thLabel.replace("Hdv ", "")}
+      {clan.thMin === clan.thMax ? clan.thMin : `${clan.thMin}-${clan.thMax}`}
     </span>
   );
 };
@@ -483,7 +470,7 @@ const ClanCard = ({ clan, live, selected }) => {
         {clan.rank}
       </span>
 
-      <div className="ft-crest-halo flex h-20 items-center justify-center">
+      <div className="ft-crest-halo flex min-h-20 items-center justify-center">
         <ClanEmblem clan={clan} live={live} />
       </div>
 
@@ -533,7 +520,7 @@ const Clans = () => {
     <section id="clans" className="mx-auto max-w-6xl px-5 py-20">
       <h2 className="ft-display text-center text-3xl md:text-4xl">NOS CLANS</h2>
       <p className="ft-muted mt-2 text-center">
-        Trois clans pour tous les niveaux d'Hôtel de Ville.
+        Deux clans pour tous les niveaux d'Hôtel de Ville.
       </p>
 
       <div className="ft-panel mt-10 rounded-2xl p-5">
@@ -571,7 +558,7 @@ const Clans = () => {
         </p>
       </div>
 
-      <div className="mt-10 grid gap-6 md:grid-cols-3">
+      <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
         {CLANS.map((c) => (
           <ClanCard key={c.tag} clan={c} live={live} selected={selected} />
         ))}
@@ -579,6 +566,33 @@ const Clans = () => {
     </section>
   );
 };
+
+const Tournois = () => (
+  <section id="tournois" className="mx-auto max-w-6xl px-5 pb-20">
+    <div className="ft-panel flex flex-col items-center gap-6 rounded-2xl px-6 py-12 text-center">
+      <p className="ft-label text-sm" style={{ color: "var(--violet)" }}>
+        Bientôt
+      </p>
+      <h2 className="ft-display text-3xl md:text-4xl">
+        UN <span className="ft-gold">GROS TOURNOI</span> SE PRÉPARE
+      </h2>
+      <p className="ft-muted max-w-xl leading-relaxed">
+        Un grand tournoi arrive prochainement. Il sera suivi de plusieurs petits
+        tournois organisés régulièrement. Les inscriptions et les dates seront
+        annoncées sur le Discord.
+      </p>
+      <a
+        href={DISCORD_URL}
+        target="_blank"
+        rel="noreferrer"
+        className="ft-btn ft-discord ft-label flex items-center gap-2 rounded-lg px-6 py-3 text-white"
+      >
+        <DiscordMark className="h-4 w-auto" />
+        Suivre les annonces
+      </a>
+    </div>
+  </section>
+);
 
 const Valeurs = () => (
   <section className="mx-auto max-w-6xl px-5 pb-20">
@@ -684,7 +698,7 @@ const Footer = () => (
           </span>
         </div>
         <p className="ft-muted mt-4 text-sm">
-          Trois clans, une seule famille. Ensemble, plus forts.
+          Deux clans, une seule famille. Ensemble, plus forts.
         </p>
       </div>
 
@@ -693,6 +707,7 @@ const Footer = () => (
         <ul className="ft-muted mt-4 space-y-2 text-sm">
           <li><a href="#accueil" className="hover:text-white">Accueil</a></li>
           <li><a href="#clans" className="hover:text-white">Nos clans</a></li>
+          <li><a href="#tournois" className="hover:text-white">Tournois</a></li>
           <li><a href="#recrutement" className="hover:text-white">Recrutement</a></li>
         </ul>
       </div>
@@ -756,13 +771,14 @@ const Footer = () => (
 export default function FamilleTraillette() {
   return (
     <div className="ft min-h-screen">
-      <a href="#clans" className="ft-skip ft-label">
+      <a href="#contenu" className="ft-skip ft-label">
         Aller au contenu
       </a>
       <Nav />
       <main id="contenu">
         <Hero />
         <Clans />
+        <Tournois />
         <Valeurs />
         <Recrutement />
       </main>
