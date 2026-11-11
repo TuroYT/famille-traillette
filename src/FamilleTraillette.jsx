@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
    Si l'appel échoue, on retombe sur les données statiques ci-dessous.
 ------------------------------------------------------------------- */
 
-const DISCORD_URL = "https://discord.gg/cJykBJSvu";
+const DISCORD_URL = "https://discord.gg/Bm6xVzcJX";
 const CLASHKING = "https://api.clashk.ing";
 
 // Logo fourni par le client. Place le fichier dans /public et garde ce chemin,
